@@ -1,3 +1,5 @@
+// Non-deterministic Finite Automata (NFA)
+
 #ifndef REGEXCPP_NFA_H_
 #define REGEXCPP_NFA_H_
 

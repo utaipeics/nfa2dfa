@@ -1,3 +1,5 @@
+// Deterministic Finite Automata (DFA)
+
 #ifndef REGEXCPP_DFA_H_
 #define REGEXCPP_DFA_H_
 

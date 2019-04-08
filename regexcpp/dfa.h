@@ -5,26 +5,22 @@
 #include <unordered_set>
 #include <unordered_map>
 
-#include "state.h"
+#include "fsa.h"
 
-class Dfa {
+class Dfa : public Fsa {
  public:
   Dfa(const std::string& init_state_name);
-  virtual ~Dfa();
+  virtual ~Dfa() = default;
 
-  void AddTransition(const std::string& state_name,
-                     char input,
-                     const std::string& next_state_name);
-  void AddFinalState(const std::string& state_name);
-  bool Match(const std::string& s) const;
+  using Fsa::AddFinalState;
+
+  virtual void AddTransition(const std::string& state_name,
+                             char input,
+                             const std::string& next_state_name) override;
+  virtual bool Match(const std::string& s) const override;
 
  private:
-  State* GetState(const std::string& state_name);
-
-  std::unordered_set<char> alphabet_;
-  std::unordered_map<std::string, State*> states_;
-  std::unordered_set<State*> final_states_;
-  State* init_state_;
+  using Fsa::GetState;
 };
 
 #endif // REGEXCPP_DFA_H_

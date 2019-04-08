@@ -1,7 +1,5 @@
 #include "dfa.h"
 
-#include <iostream>
-
 using std::string;
 
 Dfa::Dfa(const string& init_state_name) : Fsa(init_state_name) {}

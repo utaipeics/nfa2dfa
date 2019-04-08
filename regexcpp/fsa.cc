@@ -49,10 +49,12 @@ ostream& operator<< (ostream& os, const Fsa& fsa) {
   for (auto& s : fsa.states_) {
     Fsa::State* state = s.second;
 
+    // Prepend this state with ">" symbol if it is the initial state.
     if (state == fsa.init_state_) {
       os << ">";
     }
 
+    // Surround this state with square brackets if it is a final state.
     if (state->is_final) {
       os << "[" << state->name << "]\t";
     } else {

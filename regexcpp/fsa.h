@@ -31,7 +31,6 @@ class Fsa {
 
   Fsa::State* GetState(const std::string& name);
 
-  std::unordered_set<char> alphabet_;
   std::unordered_map<std::string, State*> states_;
   std::unordered_set<State*> final_states_;
   Fsa::State* init_state_;

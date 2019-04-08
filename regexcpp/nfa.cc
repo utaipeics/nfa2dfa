@@ -19,7 +19,7 @@ void Nfa::AddTransition(const string& state_name,
 
 bool Nfa::Match(const string& s) const {
   // Nfa::Match(const string& s) is a protected class member,
-  // normally this method cannot be invoked. But we'll throw
+  // so normally this method cannot be invoked. But we'll throw
   // an exception here, just in case.
   throw runtime_error("Accepting a string with NFA is unsupported.");
   return false;

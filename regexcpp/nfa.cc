@@ -1,8 +1,11 @@
 #include "nfa.h"
 
+#include <iostream>
+#include <algorithm>
 #include <stdexcept>
 
 using std::string;
+using std::vector;
 using std::runtime_error;
 
 Nfa::Nfa(const string& init_state_name) : Fsa(init_state_name) {}
@@ -23,4 +26,20 @@ bool Nfa::Match(const string& s) const {
   // an exception here, just in case.
   throw runtime_error("Accepting a string with NFA is unsupported.");
   return false;
+}
+
+vector<string> Nfa::Union(const vector<string>& names, char input) const {
+  vector<int> states;
+  for (const auto& name : names) {
+    for (auto state : states_.at(name)->next[input]) {
+      states.push_back(std::stoi(state->name));
+    }
+  }
+  std::sort(states.begin(), states.end());
+  
+  vector<string> result(states.size());
+  for (size_t i = 0; i < result.size(); i++) {
+    result[i] = std::to_string(states.at(i));
+  }
+  return result;
 }

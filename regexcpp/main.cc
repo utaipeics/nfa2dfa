@@ -28,6 +28,8 @@ int main() {
 
   dfa.AddFinalState("q0");
 
+  cout << dfa << endl;
+
   cout << "Enter a binary string that is a multiple of 5: ";
   string input;
   cin >> input;

@@ -2,25 +2,26 @@
 #define REGEXCPP_DFA_H_
 
 #include <string>
-#include <unordered_set>
-#include <unordered_map>
+#include <memory>
 
-#include "fsa.h"
+#include "nfa.h"
 
-class Dfa : public Fsa {
+class Dfa : public Nfa {
  public:
   Dfa(const std::string& init_state_name);
   virtual ~Dfa() = default;
 
-  using Fsa::AddFinalState;
-
+  using Nfa::AddFinalState;
   virtual void AddTransition(const std::string& state_name,
                              char input,
                              const std::string& next_state_name) override;
   virtual bool Match(const std::string& s) const override;
+  
+  // Converts an NFA to its corresponding minimal DFA.
+  static std::unique_ptr<Dfa> FromNfa(const Nfa& nfa);
 
  private:
-  using Fsa::GetState;
+  using Nfa::GetState;
 };
 
 #endif // REGEXCPP_DFA_H_

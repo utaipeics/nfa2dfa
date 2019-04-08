@@ -1,7 +1,7 @@
 # regexcpp
 C++ regex matching library using finite state automata
 
-Warning: This shit is not ready, if you look at the code, you may find it halarious and ridiculous.
+**Warning:** This shit is not ready, if you look at the code, you may find it halarious and ridiculous.
 
 What's done:
 * FSA (abstract, base class)

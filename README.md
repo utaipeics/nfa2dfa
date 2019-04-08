@@ -1,5 +1,5 @@
 # regexcpp
-C++ regex matching library using finite state automata
+I've been learning automata and compiler theory for a while, so I decided to write this shit for my personal study.
 
 **Warning:** This shit is not ready, if you look at the code, you may find it halarious and ridiculous.
 

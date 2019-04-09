@@ -3,6 +3,7 @@
 using std::endl;
 using std::string;
 using std::ostream;
+using std::vector;
 using std::unordered_set;
 
 Fsa::Fsa(int init_state_id) : init_state_(GetState(init_state_id)) {}
@@ -46,6 +47,14 @@ Fsa::State* Fsa::init_state() const {
 
 
 Fsa::State::State(int id) : id(id), is_final(false) {}
+
+int Fsa::State::Join(const vector<int> state_ids) {
+  string result;
+  for (auto id : state_ids) {
+    result += std::to_string(id);
+  }
+  return std::stoi(result);
+}
 
 void Fsa::State::AddTransition(char input, Fsa::State* next_state) {
   next[input].push_back(next_state);

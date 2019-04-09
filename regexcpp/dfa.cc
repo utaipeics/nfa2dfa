@@ -3,8 +3,6 @@
 #include <queue>
 #include <vector>
 
-#include "util.h"
-
 using std::vector;
 using std::queue;
 using std::string;
@@ -39,19 +37,19 @@ bool Dfa::Match(const string& s) const {
 
 unique_ptr<Dfa> Dfa::FromNfa(const Nfa& nfa) {
   // Conversion with Epsilon/Lambda transitions is currently unsupported 0.0
-  Dfa* dfa = new Dfa(1);
+  Dfa* dfa = new Dfa(nfa.init_state()->id);
 
   // Convert NFA's transition table to that of its equivalent DFA.
   queue<vector<int>> q;
   q.push({nfa.init_state()->id});
 
   while (!q.empty()) {
-    int current_state = string_utils::Join(q.front());
+    int current_state = Fsa::State::Join(q.front());
     
     for (auto c : nfa.alphabet()) {
       // Union the target states of current_state over symbol c.
       vector<int> next_states = nfa.Union(q.front(), c);
-      int new_next_state = string_utils::Join(next_states); // new state for dfa
+      int new_next_state = Fsa::State::Join(next_states); // new state for dfa
 
       dfa->AddTransition(current_state, c, new_next_state);
 

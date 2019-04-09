@@ -16,9 +16,9 @@ class Fsa {
   Fsa(int init_state_id);
   virtual ~Fsa();
 
-  // Each State has
   struct State {
     State(int id);
+    static int Join(const std::vector<int> state_ids);
     void AddTransition(char input, State* next_state);
     int id;
     std::unordered_map<char, std::vector<State*>> next;

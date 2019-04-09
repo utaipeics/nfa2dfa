@@ -1,9 +1,9 @@
 #include "dfa.h"
 
 #include <queue>
-#include <vector>
+#include <set>
 
-using std::vector;
+using std::set;
 using std::queue;
 using std::string;
 using std::unique_ptr;
@@ -18,7 +18,7 @@ void Dfa::AddTransition(int state_id, char input, int next_state_id) {
 
   auto& transition = current_state->next;
   if (transition.find(input) == transition.end()) {
-    transition[input].push_back(next_state);
+    transition[input].insert(next_state);
   }
 }
 
@@ -29,7 +29,7 @@ bool Dfa::Match(const string& s) const {
     if (transition.find(c) == transition.end()) {
       return false;
     }
-    current_state = transition.at(c).front();
+    current_state = *(transition.at(c).begin());
   }
   return current_state->is_final;
 }
@@ -40,31 +40,33 @@ unique_ptr<Dfa> Dfa::FromNfa(const Nfa& nfa) {
   Dfa* dfa = new Dfa(nfa.init_state()->id);
 
   // Convert NFA's transition table to that of its equivalent DFA.
-  queue<vector<int>> q;
+  queue<set<int>> q;
   q.push({nfa.init_state()->id});
 
   while (!q.empty()) {
-    int current_state = Fsa::State::Join(q.front());
+    int current_state_id = Fsa::State::Join(q.front());
     
     for (auto c : nfa.alphabet()) {
       // Union the target states of current_state over symbol c.
-      vector<int> next_states = nfa.Union(q.front(), c);
-      int new_next_state = Fsa::State::Join(next_states); // new state for dfa
+      set<int> union_next_state_ids = nfa.Union(q.front(), c);
+      int next_state_id = Fsa::State::Join(union_next_state_ids); // new state for dfa
 
-      dfa->AddTransition(current_state, c, new_next_state);
+      dfa->AddTransition(current_state_id, c, next_state_id);
 
       // Mark final state if one of the new states if previously a final state.
       for (auto nfa_final_state : nfa.final_states()) {
-        for (const auto& state : next_states) {
+        for (auto state : union_next_state_ids) {
           if (state == nfa_final_state->id) {
-            dfa->AddFinalState(new_next_state);
+            dfa->AddFinalState(next_state_id);
             break;
           }
         }
       }
 
-      if (dfa->GetState(new_next_state)->next.empty()) {
-        q.push(next_states);
+      // If this state has no transition defined, then
+      // this state is unprocessed.
+      if (dfa->GetState(next_state_id)->next.empty()) {
+        q.push(union_next_state_ids);
       }
     }
     q.pop();

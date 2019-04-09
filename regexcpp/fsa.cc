@@ -1,10 +1,10 @@
 #include "fsa.h"
 
 using std::endl;
+using std::set;
+using std::map;
 using std::string;
 using std::ostream;
-using std::vector;
-using std::unordered_set;
 
 Fsa::Fsa(int init_state_id) : init_state_(GetState(init_state_id)) {}
 
@@ -33,11 +33,11 @@ Fsa::State* Fsa::GetState(int id) {
   return new_state;
 }
 
-const unordered_set<char>& Fsa::alphabet() const {
+const set<char>& Fsa::alphabet() const {
   return alphabet_;
 }
 
-const unordered_set<Fsa::State*>& Fsa::final_states() const {
+const set<Fsa::State*>& Fsa::final_states() const {
   return final_states_;
 }
 
@@ -48,16 +48,17 @@ Fsa::State* Fsa::init_state() const {
 
 Fsa::State::State(int id) : id(id), is_final(false) {}
 
-int Fsa::State::Join(const vector<int> state_ids) {
-  string result;
+int Fsa::State::Join(const set<int>& state_ids) {
+  int new_state = 0;
   for (auto id : state_ids) {
-    result += std::to_string(id);
+    new_state *= 10;
+    new_state += id;
   }
-  return std::stoi(result);
+  return new_state;
 }
 
 void Fsa::State::AddTransition(char input, Fsa::State* next_state) {
-  next[input].push_back(next_state);
+  next[input].insert(next_state);
 }
 
 
@@ -67,16 +68,14 @@ ostream& operator<< (ostream& os, const Fsa& fsa) {
   for (const auto c : fsa.alphabet_) {
     os << c << "\t";
   }
-  os << endl;
+  os << endl << "----------------------" << endl;
 
   // Print the transition table.
   for (const auto& s : fsa.states_) {
     Fsa::State* state = s.second;
 
     // Prepend this state with ">" symbol if it is the initial state.
-    if (state == fsa.init_state_) {
-      os << ">";
-    }
+    os << ((state == fsa.init_state_) ? ">" : " ");
 
     // Surround this state with square brackets if it is a final state.
     if (state->is_final) {

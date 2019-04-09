@@ -7,9 +7,8 @@
 
 #include <iostream>
 #include <string>
-#include <vector>
-#include <unordered_set>
-#include <unordered_map>
+#include <set>
+#include <map>
 
 class Fsa {
  protected:
@@ -18,11 +17,13 @@ class Fsa {
 
   struct State {
     State(int id);
-    static int Join(const std::vector<int> state_ids);
+
+    static int Join(const std::set<int>& state_ids);
     void AddTransition(char input, State* next_state);
+
     int id;
-    std::unordered_map<char, std::vector<State*>> next;
     bool is_final;
+    std::map<char, std::set<State*>> next;
   };
 
   Fsa::State* GetState(int id);
@@ -30,16 +31,16 @@ class Fsa {
   virtual void AddTransition(int state_id, char input, int next_state_id) = 0;
   virtual bool Match(const std::string& s) const = 0;
   
-  const std::unordered_set<char>& alphabet() const;
-  const std::unordered_set<State*>& final_states() const;
+  const std::set<char>& alphabet() const;
+  const std::set<State*>& final_states() const;
   Fsa::State* init_state() const;
 
   friend std::ostream& operator<< (std::ostream& os, const Fsa& fsa);
 
   
-  std::unordered_set<char> alphabet_;
-  std::unordered_map<int, Fsa::State*> states_;
-  std::unordered_set<Fsa::State*> final_states_;
+  std::set<char> alphabet_;
+  std::map<int, Fsa::State*> states_;
+  std::set<Fsa::State*> final_states_;
   Fsa::State* init_state_;
 };
 

@@ -5,6 +5,7 @@
 
 #include <string>
 #include <vector>
+#include <set>
 
 #include "fsa.h"
 
@@ -19,10 +20,11 @@ class Nfa : public Fsa {
   using Fsa::init_state;
 
   virtual void AddTransition(int state_id, char input, int next_state_id) override;
-  std::vector<int> Union(const std::vector<int>& state_ids, char input) const;
+  std::set<int> Union(const std::set<int>& state_ids, char input) const;
 
  protected:
   using Fsa::GetState;
+
   virtual bool Match(const std::string& s) const override;
 };
 

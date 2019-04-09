@@ -33,19 +33,19 @@ int main() {
   dfa.AddFinalState("q0");
   */
 
-  Nfa nfa = Nfa("1");
+  Nfa nfa = Nfa(1);
 
-  nfa.AddTransition("1", '0', "1");
-  nfa.AddTransition("1", '0', "2");
-  nfa.AddTransition("1", '1', "1");
+  nfa.AddTransition(1, '0', 1);
+  nfa.AddTransition(1, '0', 2);
+  nfa.AddTransition(1, '1', 1);
 
-  nfa.AddTransition("2", '0', "3");
-  nfa.AddTransition("2", '1', "3");
+  nfa.AddTransition(2, '0', 3);
+  nfa.AddTransition(2, '1', 3);
 
-  nfa.AddTransition("3", '0', "4");
-  nfa.AddTransition("3", '1', "4");
+  nfa.AddTransition(3, '0', 4);
+  nfa.AddTransition(3, '1', 4);
 
-  nfa.AddFinalState("4");
+  nfa.AddFinalState(4);
 
   cout << nfa << endl;
 

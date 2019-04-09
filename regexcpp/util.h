@@ -1,12 +1,11 @@
 #ifndef REGEXCPP_UTIL_H_
 #define REGEXCPP_UTIL_H_
 
-#include <string>
 #include <vector>
 
 namespace string_utils {
 
-std::string Join(const std::vector<std::string>& strings);
+int Join(const std::vector<int>& nums);
 
 } // namespace string_utils
 

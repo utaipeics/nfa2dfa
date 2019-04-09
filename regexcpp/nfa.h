@@ -10,19 +10,17 @@
 
 class Nfa : public Fsa {
  public:
-  Nfa(const std::string& init_state_name);
+  Nfa(int init_state_id);
   virtual ~Nfa() = default;
 
   using Fsa::AddFinalState;
-  virtual void AddTransition(const std::string& state_name,
-                             char input,
-                             const std::string& next_state_name) override;
-  std::vector<std::string> Union(const std::vector<std::string>& names, char input) const;
-
   using Fsa::alphabet;
   using Fsa::final_states;
   using Fsa::init_state;
-  
+
+  virtual void AddTransition(int state_id, char input, int next_state_id) override;
+  std::vector<int> Union(const std::vector<int>& state_ids, char input) const;
+
  protected:
   using Fsa::GetState;
   virtual bool Match(const std::string& s) const override;

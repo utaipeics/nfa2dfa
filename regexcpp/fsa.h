@@ -13,24 +13,23 @@
 
 class Fsa {
  protected:
-  Fsa(const std::string& init_state_name);
+  Fsa(int init_state_id);
   virtual ~Fsa();
 
+  // Each State has
   struct State {
-    State(const std::string& name);
+    State(int id);
     void AddTransition(char input, State* next_state);
-    std::string name;
+    int id;
     std::unordered_map<char, std::vector<State*>> next;
     bool is_final;
   };
 
-  void AddFinalState(const std::string& name);
-  virtual void AddTransition(const std::string& state_name,
-                             char input,
-                             const std::string& next_state_name) = 0;
+  Fsa::State* GetState(int id);
+  void AddFinalState(int id);
+  virtual void AddTransition(int state_id, char input, int next_state_id) = 0;
   virtual bool Match(const std::string& s) const = 0;
-  Fsa::State* GetState(const std::string& name);
-
+  
   const std::unordered_set<char>& alphabet() const;
   const std::unordered_set<State*>& final_states() const;
   Fsa::State* init_state() const;
@@ -39,7 +38,7 @@ class Fsa {
 
   
   std::unordered_set<char> alphabet_;
-  std::unordered_map<std::string, Fsa::State*> states_;
+  std::unordered_map<int, Fsa::State*> states_;
   std::unordered_set<Fsa::State*> final_states_;
   Fsa::State* init_state_;
 };

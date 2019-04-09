@@ -1,16 +1,18 @@
 #include "util.h"
 
+#include <string>
+
 using std::string;
 using std::vector;
 
 namespace string_utils {
 
-string Join(const vector<string>& strings) {
+int Join(const vector<int>& nums) {
   string result;
-  for (const auto& s : strings) {
-    result += s;
+  for (auto num : nums) {
+    result += std::to_string(num);
   }
-  return result;
+  return std::stoi(result);
 }
 
 } // string_utils

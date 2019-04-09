@@ -8,15 +8,13 @@ using std::string;
 using std::vector;
 using std::runtime_error;
 
-Nfa::Nfa(const string& init_state_name) : Fsa(init_state_name) {}
+Nfa::Nfa(int init_state_id) : Fsa(init_state_id) {}
 
 
-void Nfa::AddTransition(const string& state_name,
-                        char input,
-                        const string& next_state_name) {
+void Nfa::AddTransition(int state_id, char input, int next_state_id) {
   alphabet_.insert(input);
-  State* current_state = GetState(state_name);
-  State* next_state = GetState(next_state_name);
+  State* current_state = GetState(state_id);
+  State* next_state = GetState(next_state_id);
   current_state->next[input].push_back(next_state);
 }
 
@@ -28,18 +26,13 @@ bool Nfa::Match(const string& s) const {
   return false;
 }
 
-vector<string> Nfa::Union(const vector<string>& names, char input) const {
+vector<int> Nfa::Union(const vector<int>& state_ids, char input) const {
   vector<int> states;
-  for (const auto& name : names) {
+  for (auto name : state_ids) {
     for (auto state : states_.at(name)->next[input]) {
-      states.push_back(std::stoi(state->name));
+      states.push_back(state->id);
     }
   }
   std::sort(states.begin(), states.end());
-  
-  vector<string> result(states.size());
-  for (size_t i = 0; i < result.size(); i++) {
-    result[i] = std::to_string(states.at(i));
-  }
-  return result;
+  return states;
 }

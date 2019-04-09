@@ -10,13 +10,11 @@
 
 class Dfa : public Nfa {
  public:
-  Dfa(const std::string& init_state_name);
+  Dfa(int init_state_id);
   virtual ~Dfa() = default;
 
   using Nfa::AddFinalState;
-  virtual void AddTransition(const std::string& state_name,
-                             char input,
-                             const std::string& next_state_name) override;
+  virtual void AddTransition(int state_id, char input, int next_state_id) override;
   virtual bool Match(const std::string& s) const override;
   
   // Converts an NFA to its corresponding minimal DFA.

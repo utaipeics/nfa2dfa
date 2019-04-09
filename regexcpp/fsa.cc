@@ -5,7 +5,7 @@ using std::string;
 using std::ostream;
 using std::unordered_set;
 
-Fsa::Fsa(const string& init_state_name) : init_state_(GetState(init_state_name)) {}
+Fsa::Fsa(int init_state_id) : init_state_(GetState(init_state_id)) {}
 
 Fsa::~Fsa() {
   for (auto& s : states_) {
@@ -14,21 +14,21 @@ Fsa::~Fsa() {
 }
 
 
-void Fsa::AddFinalState(const string& name) {
-  State* state = GetState(name);
+void Fsa::AddFinalState(int id) {
+  State* state = GetState(id);
   state->is_final = true;
   final_states_.insert(state);
 }
 
-Fsa::State* Fsa::GetState(const string& name) {
+Fsa::State* Fsa::GetState(int id) {
   // Check if we've already created an instance of this state.
-  if (states_.find(name) != states_.end()) {
-    return states_.at(name);
+  if (states_.find(id) != states_.end()) {
+    return states_.at(id);
   }
 
   // Otherwise, create a new state and add it to the state set.
-  State* new_state = new State(name);
-  states_[name] = new_state;
+  State* new_state = new State(id);
+  states_[id] = new_state;
   return new_state;
 }
 
@@ -45,7 +45,7 @@ Fsa::State* Fsa::init_state() const {
 }
 
 
-Fsa::State::State(const string& name) : name(name), is_final(false) {}
+Fsa::State::State(int id) : id(id), is_final(false) {}
 
 void Fsa::State::AddTransition(char input, Fsa::State* next_state) {
   next[input].push_back(next_state);
@@ -71,16 +71,16 @@ ostream& operator<< (ostream& os, const Fsa& fsa) {
 
     // Surround this state with square brackets if it is a final state.
     if (state->is_final) {
-      os << "[" << state->name << "]\t";
+      os << "[" << state->id << "]\t";
     } else {
-      os << state->name << "\t";
+      os << state->id << "\t";
     }
 
     for (const auto c : fsa.alphabet_) {
       if (state->next.find(c) != state->next.end()) {
         // Print all possible transition states.
         for (const auto target : state->next.at(c)) {
-          os << target->name << " ";
+          os << target->id << " ";
         }
         os << "\t";
       } else {

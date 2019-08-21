@@ -1,5 +1,5 @@
 CXX=g++
-SRC=$(wildcard regexcpp/*.cc)
+SRC=$(wildcard src/*.cc)
 BIN=main
 
 all:
